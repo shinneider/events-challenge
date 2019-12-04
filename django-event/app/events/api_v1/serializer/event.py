@@ -24,6 +24,12 @@ class Event(serializers.ModelSerializer):
         fields = ('__all__')
 
     def create(self, validated_data):
+        event = models.Ticket.objects.filter(
+            event_url=validated_data['event_url']
+        ).first()
+        if event:
+            return event
+
         ticket = validated_data.pop('ticket_set', None)
 
         city = City(data=validated_data['city'])
@@ -45,4 +51,5 @@ class Event(serializers.ModelSerializer):
         ticket = TicketCreate(data=ticket, many=True)
         if not ticket.is_valid():
             raise ValueError(ticket.errors)
+        
         ticket.save()
