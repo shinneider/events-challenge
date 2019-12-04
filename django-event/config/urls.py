@@ -16,5 +16,5 @@ Including another URLconf
 from django.urls import include, path
 
 urlpatterns = [
-    path('v1/', include('app.accounts.api_v1.urls'))
+    path('v1/', include('app.events.api_v1.urls'))
 ]

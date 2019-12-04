@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser';
 import { AuthMiddleware } from './shared/middleware/auth';
 import { TraceMiddleware } from './shared/middleware/trace';
 import { loggerMiddleware } from './shared/middleware/logger';
-import { AuthRoute, AccountRoute, RssRoute } from './shared/routers';
+import { AuthRoute, AccountRoute, EventRoute } from './shared/routers';
 
 class App {
   constructor() {
@@ -39,7 +39,7 @@ class App {
     this.express.use('/', router);
     this.express.all('/v1/auth*', AuthRoute);
     this.express.all('/v1/accounts*', AccountRoute);
-    this.express.all('/v1/rss*', RssRoute);
+    this.express.all('/v1/events*', EventRoute);
   }
 }
 
