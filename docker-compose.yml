@@ -28,13 +28,16 @@ services:
     depends_on:
       - postgres
 
-  rss:
-    build: ./flask-rss/
+  event:
+    build: ./django-event/
+    environment:
+      - VSCODE_DEBUG=${VSCODE_DEBUG}
     volumes:
-      - ./flask-rss/:/usr/src/app
+      - ./django-event/:/usr/src/app
       - ./logs/:/usr/src/app/logs/
     ports:
       - "83:8000"
+      - "813:5678"
 
   gateway:
     build: ./node-api-gateway/
@@ -51,4 +54,4 @@ services:
     environment:
       POSTGRES_USER: "root"
       POSTGRES_PASSWORD: "root1234"
-      POSTGRES_DB: "infoglobo"
+      POSTGRES_DB: "example"
