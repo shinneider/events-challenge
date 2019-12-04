@@ -1,0 +1,1 @@
+from app.events.api_v1.serializer.event import *

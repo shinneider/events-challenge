@@ -8,6 +8,7 @@ class Event(models.Model):
     description = models.TextField(verbose_name=_("description"))
     start_at = models.DateTimeField(verbose_name=_("start at"))
     finish_at = models.DateTimeField(verbose_name=_("finish at"))
+    event_url = models.URLField(verbose_name=_("event url"))
 
     class Meta:
         db_table = "events_event"

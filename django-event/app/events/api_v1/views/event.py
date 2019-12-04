@@ -5,7 +5,7 @@ from app.shared.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework import generics
 
 
-class EventsList(generics.ListCreateAPIView):
+class EventsListView(generics.ListCreateAPIView):
     queryset = models.Event.objects.all()
     serializer_class = serializer.Event
     permission_classes = (IsAuthenticatedOrReadOnly, )
@@ -15,7 +15,20 @@ class EventsList(generics.ListCreateAPIView):
         return super().post(request, *args, **kwargs)
 
 
-class EventRetrieve(generics.RetrieveAPIView):
+class EventRetrieveView(generics.RetrieveAPIView):
     queryset = models.Event.objects.all()
     serializer_class = serializer.Event
     permission_classes = (AllowAny, )
+
+    def get_object(self):
+        origin = self.request.query_params.get('origin', 'internal')
+
+        if origin == 'internal':
+            return super().get_object()
+
+        elif origin == 'sympla':
+            return self.queryset.filter(
+                event_url__endswith='__{}'.format(self.kwargs['pk'])
+            ).first()
+
+        return None

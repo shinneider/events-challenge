@@ -38,6 +38,8 @@ services:
     ports:
       - "83:8000"
       - "813:5678"
+    depends_on:
+      - postgres
 
   gateway:
     build: ./node-api-gateway/
