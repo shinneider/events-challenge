@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     # Developed app's
     'app.events',
+    'app.geo',
 ]
 
 MIDDLEWARE = [
