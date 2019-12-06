@@ -13,7 +13,7 @@ class EventsListCrawler:
     PAGINATOR = '?ordem=data&pagina={page}'
 
     def __init__(self, *args, **kwargs):
-        self.browser = launch(headless=True)
+        self.browser = launch(headless=settings.BROWSER_HEADLESS)
 
     async def start_crawler(self):
         if inspect.isawaitable(self.browser):
@@ -25,14 +25,19 @@ class EventsListCrawler:
         event_url = []
 
         loaded_page = 0 
+        erros = 0
         while loaded_page != self.MAX_PAGE:
             try:  # prevent not load page if error
                 await self.get_page(page, loaded_page)
                 content = await self.get_body_data(page)
                 event_url.append(await self.get_event_url(content))
                 loaded_page += 1
-            except Exception as e:
-                print(e)
+                erros = 0
+            except Exception:
+                # if 3 or more erro in same page, jump to the next
+                erros += 1
+                if erros > 3:
+                    loaded_page + 1
         
         return event_url
             
