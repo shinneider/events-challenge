@@ -28,7 +28,7 @@ class City(serializers.ModelSerializer):
     def create(self, validated_data):
         obj = models.City.objects.filter(
             name=validated_data['name'].strip(),
-            state=validated_data['state'].strip()
+            state__initials=validated_data['state']['initials'].strip()
         ).first()
         
         if not obj:
