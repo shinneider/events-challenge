@@ -27,6 +27,7 @@ services:
       - "812:5678"
     depends_on:
       - postgres
+      - account
 
   event:
     build: ./django-event/
@@ -48,6 +49,13 @@ services:
       - ./logs/:/usr/src/app/logs/
     ports:
       - "80:3000"
+
+  # event-crawler:
+  #   build: ./event-crawler/
+  #   volumes:
+  #     - ./event-crawler/:/usr/src/app
+  #   depends_on:
+  #     - event
 
   postgres:
     image: postgres

@@ -1,4 +1,4 @@
-#!/bin/ash
+#!/bin/sh
 # echo "####################"
 # echo "## RUNNING TEST's ##"
 # echo "####################"
