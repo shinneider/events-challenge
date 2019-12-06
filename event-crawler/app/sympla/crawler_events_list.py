@@ -33,15 +33,15 @@ class EventsListCrawler:
         erros = 0
         while loaded_page != self.MAX_PAGE:
             try:  # prevent not load page if error
-                Logger.info(f'getting page: {loaded_page}')
+                Logger.info(f" |--> Getting page: {loaded_page}")
                 await self.get_page(page, loaded_page)
                 content = await self.get_body_data(page)
                 event_url += await self.get_event_url(content)
                 loaded_page += 1
                 erros = 0
-                Logger.info('  --- success')
+                Logger.info(f" |     '-> success")
             except Exception as e:
-                Logger.error(f'  --- error {e}')
+                Logger.error(f" |     '-> error {e}")
                 # if 3 or more erro in same page, jump to the next
                 erros += 1
                 if erros > 3:

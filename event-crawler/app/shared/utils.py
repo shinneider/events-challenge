@@ -14,9 +14,6 @@ def site_data(url, method='GET', expected_status=200, output='text', **kwargs):
     if method not in ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']:
         raise ValueError(f'Method `{method}` is invalid')
     
-    if kwargs.get('data', None):
-        kwargs['data'] = json_dumps(kwargs['data'])
-
     headers = kwargs.get('headers', {})
     headers['auth'] = 'true'
     headers['userId'] = settings.USER_ID
@@ -31,13 +28,13 @@ def site_data(url, method='GET', expected_status=200, output='text', **kwargs):
         data = response.text if output == 'text' else response.json
 
         if not status:
-            Logger.error(f'Error URL: `{url}` response status: '+
+            Logger.error(f' |--> Error URL: `{url}` response status: '+
                          f'{response.status_code} | output: {output} | '+
                          f'data: {data}')
-
-        Logger.info(f'Response ok')
+        else:
+            Logger.info(f' |--> Data sended all is ok')
         return status, data
     
     except Exception as err:
-        Logger.error(f'Error URL: `{url}` | {err}')
+        Logger.error(f' |--> Error URL: `{url}` | {err}')
         return False, None
