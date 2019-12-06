@@ -29,6 +29,8 @@ class MetricsView(APIView):
     def get_events_by_city(self):
         return models.Event.objects.filter(
             city__isnull=False
+        ).values(
+            'city__name', 'city__state__initials'
         ).annotate(
             city_name=F('city__name'),
             state_name=F('city__state__initials'),
@@ -38,7 +40,7 @@ class MetricsView(APIView):
     def get_events_by_state(self):
         return models.Event.objects.filter(
             city__isnull=False
-        ).annotate(
+        ).values('city__state__initials').annotate(
             state_name=F('city__state__initials'),
             total_events = Count('city__state'),
         ).values('state_name','total_events').order_by()

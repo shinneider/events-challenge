@@ -19,7 +19,6 @@ class State(serializers.ModelSerializer):
 
 class City(serializers.ModelSerializer):
     state = State()
-    name = serializers.CharField()
     
     class Meta:
         model = models.City
