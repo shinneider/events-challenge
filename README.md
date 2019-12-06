@@ -1,7 +1,7 @@
 INFOGLOBO CHALLENGE
 ===================
 
-This is a project to crawler RSS Feed and transpile to json format.
+This is a project to crawler Events Sympla Feed and save this.
 
 # Architecture schema
 
@@ -16,7 +16,7 @@ This is a project to crawler RSS Feed and transpile to json format.
   |cron job or |               |
   |manually    | ------>  Event craweler  <---->  /Sympla Site\
   |start event |            (python)
-  --------------          (Not finished)
+  --------------       (Run every 15 minutes)
 ```
 - Api Gateway domain
     - Api Gateway manager micro services routers
@@ -39,6 +39,7 @@ This is a project to crawler RSS Feed and transpile to json format.
 - Event Crawler Domain
     - Get sympla events
     - Send this events to event micro service
+    - Run every 5 minutes
 
 - All Micro Services
     - All microservice logger in /logs/requests.log
@@ -79,6 +80,10 @@ This is a project to crawler RSS Feed and transpile to json format.
 - Check if all is ok
     ```
     GET in http://localhost:80
+    ```
+- if you need to run one microservice manually (util to start crawler for test's)
+    ```
+    docker-compose exec (account,auth,gateway,event or event-crawler) run-server
     ```
 
 # Project URL's
@@ -147,12 +152,12 @@ all apps logger in this fille, and all logger contains idLog and idReq, idLog is
 # How to run project test
 1. use docker-compose
     ```
-    docker-compose run (account,auth,gateway or rss) run-test
+    docker-compose run (account,auth,gateway,event or event-crawler) run-test
     ```
 
 2. inside docker-compose (no need to download all dependency every time)
     ```
-    docker-compose run (account,auth,gateway or rss) /bin/sh
+    docker-compose run (account,auth,gateway,event or event-crawler) /bin/sh
     run-test
     ```
 
@@ -190,6 +195,5 @@ configure apps correctly for production, has many tutorials in the web
 
 # Future improvements
 - SWAGGER -> ADD swagger in all micro services for mapper apis
-- CACHE -> ADD cache on RSS URL, because it has static content throughout the day
 - API GATEWAY -> Improve jwt validation (see a TODO inside `/src/shared/middleware/auth`)
 - API GATEWAY -> Improve inputd data logger (see a TODO inside `/src/shared/middleware/logger`)

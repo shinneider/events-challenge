@@ -10,7 +10,7 @@ class EventsListCrawler:
     """
         This crawlers get all events urls for event page
     """
-    MAX_PAGE = 1  # use -1 to get all pages,
+    MAX_PAGE = 3  # use -1 to get all pages,
     PAGINATOR = '?ordem=data&pagina={page}'
 
     def __init__(self, *args, **kwargs):

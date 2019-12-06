@@ -61,9 +61,12 @@ class EventsPageCrawler:
         data['name'] = soup.find('h1').text.strip()
         data.update(await self.get_event_locate(soup))
         data.update(await self.get_start_end_dates(soup))
-        data['description'] = await self.get_description(soup)
         data['tickets'] = await self.get_tickets(soup)
 
+        data['description'] = 'ommited because is too large to logger'
+        Logger.info(f" |     '-> data: {data}")
+
+        data['description'] = await self.get_description(soup)
         return data
 
     async def get_event_locate(self, soup):
@@ -82,10 +85,10 @@ class EventsPageCrawler:
                         'initials': locate.split(',')[-1].strip()
                     }
                 },
-                'online': False
+                'event_online': False
             }
 
-        return { 'online': True }
+        return { 'event_online': True }
 
     async def get_start_end_dates(self, soup):
         dates = soup.find('div', {'class': 'event-info-calendar'})

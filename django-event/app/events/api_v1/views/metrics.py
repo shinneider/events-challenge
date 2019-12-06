@@ -11,23 +11,44 @@ class MetricsView(APIView):
     permission_classes = (AllowAny, )
 
     def get(self, request, *args, **kwargs):
-        by_city = models.Event.objects.values(
-            'city__name',
-            'city__state__initials'
+        return Response({
+            'events_by': {
+                'online': self.get_events_online(),
+                'city': self.get_events_by_city(),
+                'state': self.get_events_by_state(),
+            },
+            'biggest_price': self.get_events_biggest_price(),
+            'events_ticket_average': self.get_events_average(),
+            'events_by_day_week': 'not implemented',
+            'events_with_facebook_url': self.get_events_with_facebook_url()
+        })
+
+    def get_events_online(self):
+        return models.Event.objects.filter(event_url=True).count()
+
+    def get_events_by_city(self):
+        return models.Event.objects.filter(
+            city__isnull=False
         ).annotate(
+            city_name=F('city__name'),
+            state_name=F('city__state__initials'),
             total_events = Count('city'),
-        ).order_by()
+        ).values('city_name', 'state_name', 'total_events').order_by()
 
-        by_state = models.Event.objects.values(
-            'city__state__initials'
+    def get_events_by_state(self):
+        return models.Event.objects.filter(
+            city__isnull=False
         ).annotate(
+            state_name=F('city__state__initials'),
             total_events = Count('city__state'),
-        ).order_by()
+        ).values('state_name','total_events').order_by()
 
-        average = (models.Event.objects.aggregate(Count('ticket'))['ticket__count'] /
-                   models.Event.objects.count())
+    def get_events_average(self):
+        return (models.Event.objects.aggregate(Count('ticket'))['ticket__count'] /
+                models.Event.objects.count())
 
-        biggest_price = models.Event.objects.filter(
+    def get_events_biggest_price(self):
+        return models.Event.objects.filter(
             ticket__isnull=False
         ).values(
             'id', 'name', 'event_url'
@@ -35,14 +56,9 @@ class MetricsView(APIView):
             ticket_biggest_price = Max('ticket__value'),
         ).order_by('-ticket_biggest_price').first()
 
-        events_by_day_week = 'not implemented'
-
-        return Response({
-            'events_by': {
-                'city': by_city,
-                'state': by_state
-            },
-            'biggest_price': biggest_price,
-            'events_ticket_average': average,
-            'events_by_day_week': events_by_day_week
-        })
+    def get_events_with_facebook_url(self):
+        return models.Event.objects.filter(
+            description__regex=r'https://www.facebook.com/events/.*/'
+        ).values(
+            'id', 'name', 'event_url'
+        )
