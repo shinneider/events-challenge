@@ -9,6 +9,9 @@ USER_AGENT_STRING = ("Mozilla/5.0 (Linux; <Android Version>; <Build Tag etc.>)"
 
 BROWSER_HEADLESS = config('BROWSER_HEADLESS', cast=bool)
 
+USER_ID = config('USER_ID', cast=bool)
+
+MICRO_SERVICE_EVENT_URL = config('MICRO_SERVICE_EVENT_URL')
 
 # Python Logging Dict Config
 # https://docs.python.org/3/library/logging.config.html#logging.config.dictConfig
