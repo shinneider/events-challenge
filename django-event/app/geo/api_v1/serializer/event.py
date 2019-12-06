@@ -11,9 +11,9 @@ class State(serializers.ModelSerializer):
         exclude = ('id', )
 
     def create(self, validated_data):
-        obj, created = models.State.objects.get_or_create(
-            initials=validated_data['initials'],
-            name=validated_data.get('name', None)
+        obj, _ = models.State.objects.get_or_create(
+            initials=validated_data['initials'].strip(),
+            name=validated_data.get('name', '').strip()
         )
         return obj
 
@@ -26,14 +26,21 @@ class City(serializers.ModelSerializer):
         exclude = ('id', )
 
     def create(self, validated_data):
-        state = State(data=validated_data['state'])
-        if state.is_valid():
-            validated_data['state'] = state.save()
-
-            obj, created = models.City.objects.get_or_create(
-                name=validated_data['name'],
-                state=validated_data['state']
-            )
-            return obj
+        obj = models.City.objects.filter(
+            name=validated_data['name'].strip(),
+            state=validated_data['state'].strip()
+        ).first()
         
-        return ValueError('`state` is not valid')
+        if not obj:
+            state = State(data=validated_data['state'])
+            if state.is_valid():
+                validated_data['state'] = state.save()
+
+                obj, _ = models.City.objects.get_or_create(
+                    name=validated_data['name'],
+                    state=validated_data['state']
+                )
+        
+            return ValueError('`state` is not valid')
+
+        return obj
