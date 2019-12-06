@@ -54,7 +54,7 @@ class MetricsView(APIView):
             'id', 'name', 'event_url'
         ).annotate(
             ticket_biggest_price = Max('ticket__value'),
-        ).order_by('-ticket_biggest_price').first()
+        ).order_by('ticket_biggest_price').first()
 
     def get_events_with_facebook_url(self):
         return models.Event.objects.filter(

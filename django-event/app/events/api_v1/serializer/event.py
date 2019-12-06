@@ -17,7 +17,7 @@ class TicketView(serializers.ModelSerializer):
 
 class Event(serializers.ModelSerializer):
     city = City(required=False)
-    ticket = TicketView(source='ticket_set', many=True, required=False)
+    tickets = TicketView(source='ticket_set', many=True, required=False)
     
     class Meta:
         model = models.Event

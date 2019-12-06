@@ -146,7 +146,7 @@ class EventsPageCrawler:
 
             tickets.append({
                 'name': name,
-                'text': price
+                'value': price
             })
 
         return tickets
