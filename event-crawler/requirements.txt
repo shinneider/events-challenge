@@ -2,3 +2,4 @@ pyppeteer
 python-decouple
 beautifulsoup4
 websockets==6.0
+requests
