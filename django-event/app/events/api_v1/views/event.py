@@ -10,6 +10,12 @@ class EventsListView(generics.ListCreateAPIView):
     serializer_class = serializer.Event
     permission_classes = (IsAuthenticatedOrReadOnly, )
 
+    def get_serializer(self, *args, **kwargs):
+        """ if an array is passed, set serializer to many """
+        if isinstance(kwargs.get('data', {}), list):
+            kwargs['many'] = True
+        return super(EventsListView, self).get_serializer(*args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         Logger.info('Event create request', request=request)
         return super().post(request, *args, **kwargs)
